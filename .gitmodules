@@ -1,0 +1,3 @@
+[submodule "libqtsparql-tracker"]
+	path = libqtsparql-tracker
+	url = https://git.gitorious.org/maemo-af/libqtsparql-tracker.git
