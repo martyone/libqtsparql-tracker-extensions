@@ -1,0 +1,39 @@
+* Wed May 15 2013 Martin Kampas <martin.kampas@tieto.com> - 0.0.7
+- Fix part of NEMO#666: libqtsparql-tracker-live-tests should be in a separate package and 1 test fails
+- Update libqtsparql-tracker-extensions-tests-do-not-su.patch to patch also live tests
+- Update libqtsparql-tracker-extensions-tests-do-not-hardcode-paths.patch to patch also live tests
+- Extract live-tests into separate package
+
+* Wed Mar 20 2013 Martin Kampas <martin.kampas@tieto.com> - 0.0.7
+- Fix URL in spec file: gitorious.com -> gitorious.org
+
+* Thu Mar 07 2013 Martin Kampas <martin.kampas@tieto.com> - 0.0.7
+- Fix NEMO#533: libqtsparql-tracker-extensions-tests: tests.xml does not validate and test case fails
+- Add libqtsparql-tracker-extensions-tests-fix-duplicate-case-name.patch
+- Add libqtsparql-tracker-extensions-tests-do-not-su.patch
+- Add libqtsparql-tracker-extensions-tests-do-not-hardcode-paths.patch
+
+* Wed Jan 16 2013 Marko Saukko <marko.saukko@jollamobile.com> - 0.0.7
+- Update changelog to point to version 0.0.7 as well. 
+
+* Wed Mar 02 2011 Maitrey Mishra <ext-maitrey.mishra@nokia.com> - 0.0.5
+- BMC#14164
+- Fix: upper bound of rowsInserted signal was wrong when inserting initial data.
+- Gallery grid showing duplicate images, which are displayed as corrupted images 
+- The user can remove rows from the model (QAbstractItemModel API)
+- [FEATURE] User-removal of rows
+- TrackerChangeNotifier: possibility to disable the signals (they will
+  be buffered)
+- TrackerLiveQuery: Fix: emit initialQueryFinished in error cases
+- TrackerLiveQuery: Incorrect API usage prints out warnings
+- TrackerLiveQuery: Added tests
+- First release of QtSparqlTrackerLive (contains TrackerLiveQuery)
+- Don't create one QDBusConnection per thread; QDBus should be thread safe.
+- API break: Tracker::ChangeNotifier -> TrackerChangeNotifier 
+
+* Fri Nov 30 2010 Maitrey Mishra <ext-maitrey.mishra@nokia.com> - 0.0.3
+- New package, fixes Feature - 5740
+- Initial release.
+- Tracker::ChangeNotifier for listening to the GraphUpdated signal from Tracker.
+- Tracker::syncTracker
+

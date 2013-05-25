@@ -1,0 +1,137 @@
+diff --git a/tests/extensions/tests.xml b/tests/extensions/tests.xml
+index 8dd0389..68c9853 100644
+--- a/tests/extensions/tests.xml
++++ b/tests/extensions/tests.xml
+@@ -5,25 +5,25 @@
+ 
+       <pre_steps>
+ 	<step>
+-	  su - user -c "tracker-sparql -u -f /usr/share/libqtsparql-tracker-extensions-tests/clean-data.query";
++	  tracker-sparql -u -f /usr/share/libqtsparql-tracker-extensions-tests/clean-data.query;
+         </step>
+       </pre_steps>
+ 
+       <case name="test-signals" description="Tracker Signals">
+         <step>
+-	  su - user -c "/usr/lib/libqtsparql-tracker-extensions-tests/tst_tracker_signals"
++	  /usr/lib/libqtsparql-tracker-extensions-tests/tst_tracker_signals
+         </step>
+       </case>
+ 
+       <case name="test-sync" description="Tracker Sync">
+         <step>
+-	  su - user -c "/usr/lib/libqtsparql-tracker-extensions-tests/tst_tracker_sync"
++	  /usr/lib/libqtsparql-tracker-extensions-tests/tst_tracker_sync
+         </step>
+       </case>
+ 
+       <post_steps>
+ 	<step>
+-	  su - user -c "tracker-sparql -u -f /usr/share/libqtsparql-tracker-extensions-tests/clean-data.query"
++	  tracker-sparql -u -f /usr/share/libqtsparql-tracker-extensions-tests/clean-data.query
+         </step>
+       </post_steps>
+ 
+@@ -32,7 +32,7 @@
+       </environments>
+ 
+       <get>
+-	<file>/home/user/.local/share/tracker/tracker-store.log</file>
++	<file>${XDG_DATA_HOME:-${HOME}/.local/share}/tracker/tracker-store.log</file>
+       </get>
+ 
+     </set>
+diff --git a/tests/live/tests.xml b/tests/live/tests.xml
+index 8b50019..3e811c5 100644
+--- a/tests/live/tests.xml
++++ b/tests/live/tests.xml
+@@ -4,67 +4,67 @@
+     <set name="qtsparql-tracker" description="Tests for QtSparqlTrackerLive">
+       <case name="test-merger" description="Unit tests for the merging algorithm">
+         <step>
+-	  su - user -c "/usr/lib/libqtsparql-tracker-live-tests/tst_live_merger"
++	  /usr/lib/libqtsparql-tracker-live-tests/tst_live_merger
+         </step>
+       </case>
+       <case name="test-movablerowmodel" description="Unit tests for the MovableRowModel">
+         <step>
+-	  su - user -c "/usr/lib/libqtsparql-tracker-live-tests/tst_live_movablerowmodel"
++	  /usr/lib/libqtsparql-tracker-live-tests/tst_live_movablerowmodel
+         </step>
+       </case>
+       <case name="test-ontology" description="Unit tests for the OntologyQuerier">
+         <step>
+-	  su - user -c "/usr/lib/libqtsparql-tracker-live-tests/tst_live_ontology"
++	  /usr/lib/libqtsparql-tracker-live-tests/tst_live_ontology
+         </step>
+       </case>
+       <case name="test-usermodifiablemodel" description="Unit tests for the UserModifiableModel">
+         <step>
+-	  su - user -c "/usr/lib/libqtsparql-tracker-live-tests/tst_live_usermodifiablemodel"
++	  /usr/lib/libqtsparql-tracker-live-tests/tst_live_usermodifiablemodel
+         </step>
+       </case>
+       <case name="test-live-simple" description="Live queries: simple">
+         <step>
+-	  su - user -c "/usr/lib/libqtsparql-tracker-live-tests/tst_live_simple"
++	  /usr/lib/libqtsparql-tracker-live-tests/tst_live_simple
+         </step>
+       </case>
+       <case name="test-live-simple-ordered" description="Live queries: simple ordered">
+         <step>
+-	  su - user -c "/usr/lib/libqtsparql-tracker-live-tests/tst_live_simple_ordered"
++	  /usr/lib/libqtsparql-tracker-live-tests/tst_live_simple_ordered
+         </step>
+       </case>
+       <case name="test-live-multivalue" description="Live queries: multivalue">
+         <step>
+-	  su - user -c "/usr/lib/libqtsparql-tracker-live-tests/tst_live_multivalue"
++	  /usr/lib/libqtsparql-tracker-live-tests/tst_live_multivalue
+         </step>
+       </case>
+       <case name="test-live-aggregates" description="Live queries: aggregates">
+         <step>
+-	  su - user -c "/usr/lib/libqtsparql-tracker-live-tests/tst_live_aggregates"
++	  /usr/lib/libqtsparql-tracker-live-tests/tst_live_aggregates
+         </step>
+       </case>
+       <case name="test-live-pausing" description="Live queries: pausing" timeout="600">
+         <step>
+-	  su - user -c "/usr/lib/libqtsparql-tracker-live-tests/tst_live_pausing"
++	  /usr/lib/libqtsparql-tracker-live-tests/tst_live_pausing
+         </step>
+       </case>
+       <case name="test-live-datadriven" description="Live queries: data driven tests" timeout="600">
+         <step>
+-	  su - user -c "/usr/lib/libqtsparql-tracker-live-tests/tst_live_datadriven"
++	  /usr/lib/libqtsparql-tracker-live-tests/tst_live_datadriven
+         </step>
+       </case>
+       <case name="test-live-errors" description="Live queries: error cases">
+         <step>
+-	  su - user -c "/usr/lib/libqtsparql-tracker-live-tests/tst_live_errors"
++	  /usr/lib/libqtsparql-tracker-live-tests/tst_live_errors
+         </step>
+       </case>
+       <case name="test-live-warnings" description="Live queries: incorrect api usage">
+         <step>
+-	  su - user -c "/usr/lib/libqtsparql-tracker-live-tests/tst_live_warnings"
++	  /usr/lib/libqtsparql-tracker-live-tests/tst_live_warnings
+         </step>
+       </case>
+       <case name="test-live-updaters" description="Live queries: updater classes functional test">
+         <step>
+-	  su - user -c "/usr/lib/libqtsparql-tracker-live-tests/tst_live_updaters"
++	  /usr/lib/libqtsparql-tracker-live-tests/tst_live_updaters
+         </step>
+       </case>
+       <environments>
+@@ -72,7 +72,7 @@
+       </environments>
+ 
+       <get>
+-	<file>/home/user/.local/share/tracker/tracker-store.log</file>
++	<file>${XDG_DATA_HOME:-${HOME}/.local/share}/tracker/tracker-store.log</file>
+       </get>
+ 
+     </set>
