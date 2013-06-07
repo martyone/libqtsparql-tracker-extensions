@@ -7,6 +7,7 @@ License: LGPLv2
 URL:     http://gitorious.org/+maemo-af-developers/maemo-af/libqtsparql-tracker
 Source0: %{name}-%{version}.tar.gz
 Patch0: fix-tests.patch
+Patch1: increase-timeouts.patch
 BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: doxygen
@@ -57,7 +58,7 @@ Description: %{summary}
 %setup -q -n %{name}-%{version}/libqtsparql-tracker
 
 %patch0 -p1
-
+%patch1 -p1
 
 %build
 ./autogen.sh

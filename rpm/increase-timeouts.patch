@@ -1,0 +1,475 @@
+commit 47d5c78eba1fd62e114bacc92fc01e45e5db923d (HEAD, patching)
+Author: Martin Kampas <martin.kampas@tieto.com>
+Date:   Fri Jun 7 11:53:13 2013 +0000
+
+    *dirty* increase timeouts
+
+diff --git a/tests/live-aggregates/tst_live_aggregates.cpp b/tests/live-aggregates/tst_live_aggregates.cpp
+index 1e8b78f..e7be7f6 100644
+--- a/tests/live-aggregates/tst_live_aggregates.cpp
++++ b/tests/live-aggregates/tst_live_aggregates.cpp
+@@ -287,7 +287,7 @@ void tst_TrackerLiveAggregates::primaryResourceAdded()
+                               QSparqlQuery::InsertStatement));
+     QTime timer;
+     timer.start();
+-    while(timer.elapsed() < 5000 && spy.count() < 1)
++    while(timer.elapsed() < DEFAULT_TIMEOUT && spy.count() < 1)
+         QTest::qWait(100);
+ 
+     // Verify the inserted row
+@@ -329,7 +329,7 @@ void tst_TrackerLiveAggregates::primaryResourceRemoved()
+                               QSparqlQuery::DeleteStatement));
+     QTime timer;
+     timer.start();
+-    while(timer.elapsed() < 5000 && spy.count() < 1)
++    while(timer.elapsed() < DEFAULT_TIMEOUT && spy.count() < 1)
+         QTest::qWait(100);
+ 
+     // Verify the deleted row
+@@ -374,7 +374,7 @@ void tst_TrackerLiveAggregates::aggregatedResourceAdded()
+                               QSparqlQuery::InsertStatement));
+     QTime timer;
+     timer.start();
+-    while(timer.elapsed() < 5000 && spy.count() < 2)
++    while(timer.elapsed() < DEFAULT_TIMEOUT && spy.count() < 2)
+         QTest::qWait(100);
+ 
+     // Verify the modified row
+@@ -429,7 +429,7 @@ void tst_TrackerLiveAggregates::aggregatedResourceRemovedExplicit()
+                               QSparqlQuery::DeleteStatement));
+     QTime timer;
+     timer.start();
+-    while(timer.elapsed() < 5000 && spy.count() < 2)
++    while(timer.elapsed() < DEFAULT_TIMEOUT && spy.count() < 2)
+         QTest::qWait(100);
+ 
+     // Verify the modified row
+@@ -481,7 +481,7 @@ void tst_TrackerLiveAggregates::aggregatedResourceRemoved()
+                               QSparqlQuery::DeleteStatement));
+     QTime timer;
+     timer.start();
+-    while(timer.elapsed() < 5000 && spy.count() < 2)
++    while(timer.elapsed() < DEFAULT_TIMEOUT && spy.count() < 2)
+         QTest::qWait(100);
+ 
+     QCOMPARE(spy.count(), 2);
+@@ -537,7 +537,7 @@ void tst_TrackerLiveAggregates::aggregatedResourceRelationshipChanged()
+ 
+     QTime timer;
+     timer.start();
+-    while(timer.elapsed() < 5000 && spy.count() < 6)
++    while(timer.elapsed() < DEFAULT_TIMEOUT && spy.count() < 6)
+         QTest::qWait(100);
+ 
+     // Verify the modified rows
+@@ -594,7 +594,7 @@ void tst_TrackerLiveAggregates::aggregatedResourceChanged()
+ 
+     QTime timer;
+     timer.start();
+-    while(timer.elapsed() < 5000 && spy.count() < 2)
++    while(timer.elapsed() < DEFAULT_TIMEOUT && spy.count() < 2)
+         QTest::qWait(100);
+ 
+     QCOMPARE(spy.count(), 2);
+diff --git a/tests/live-benchmark/tst_live_benchmark.cpp b/tests/live-benchmark/tst_live_benchmark.cpp
+index 9245937..06a1716 100644
+--- a/tests/live-benchmark/tst_live_benchmark.cpp
++++ b/tests/live-benchmark/tst_live_benchmark.cpp
+@@ -179,7 +179,7 @@ void tst_TrackerLiveBenchmark::measureInitialModelCreation()
+ 
+     liveQuery->start();
+ 
+-    signalsRecorder->waitForSignals(sigs, 5000);
++    signalsRecorder->waitForSignals(sigs, DEFAULT_TIMEOUT);
+     QCOMPARE( liveQuery->model()->rowCount(), testDataAmount );
+ 
+     const qint64 liveQueryStartTime = liveQuery->property("test-livequerystart").toLongLong();
+diff --git a/tests/live-datadriven/tst_live_datadriven.cpp b/tests/live-datadriven/tst_live_datadriven.cpp
+index a6e653e..fa6c3df 100644
+--- a/tests/live-datadriven/tst_live_datadriven.cpp
++++ b/tests/live-datadriven/tst_live_datadriven.cpp
+@@ -338,7 +338,7 @@ void tst_TrackerLiveDataDriven::test()
+             // We're inserting initial data.  Here we need to wait a bit to
+             // drain the signals so that they won't make our model think it
+             // needs to do update queries.
+-            QTest::qWait(3000);
++            QTest::qWait(15000);
+ 
+             // We start the liveQuery this late, to be able to insert initial
+             // data (index 0 of updatesAndResults)
+@@ -348,7 +348,7 @@ void tst_TrackerLiveDataDriven::test()
+ 
+         if (up->waitForResults()) {
+             // Wait until the signals have arrived
+-            bool signalsArrived = rec.waitForSignals(sigs, 5000);
++            bool signalsArrived = rec.waitForSignals(sigs, DEFAULT_TIMEOUT);
+ 
+             if (!signalsArrived) {
+                 // print out error information
+diff --git a/tests/live-multivalue/tst_live_multivalue.cpp b/tests/live-multivalue/tst_live_multivalue.cpp
+index cf3ebb4..1a35402 100644
+--- a/tests/live-multivalue/tst_live_multivalue.cpp
++++ b/tests/live-multivalue/tst_live_multivalue.cpp
+@@ -239,7 +239,7 @@ void tst_TrackerLiveMultiValue::primaryResourceAdded()
+                      QSparqlQuery::InsertStatement));
+     QTime timer;
+     timer.start();
+-    while(timer.elapsed() < 5000 && spy.count() < 1)
++    while(timer.elapsed() < DEFAULT_TIMEOUT && spy.count() < 1)
+         QTest::qWait(100);
+ 
+     // Verify the inserted row but don't care about ordering
+@@ -269,7 +269,7 @@ void tst_TrackerLiveMultiValue::primaryResourceRemoved()
+                      QSparqlQuery::DeleteStatement));
+     QTime timer;
+     timer.start();
+-    while(timer.elapsed() < 5000 && model->rowCount() > 2)
++    while(timer.elapsed() < DEFAULT_TIMEOUT && model->rowCount() > 2)
+         QTest::qWait(100);
+ 
+     // The test just verifies that the contents of the model are correct. The
+@@ -306,7 +306,7 @@ void tst_TrackerLiveMultiValue::primaryResourceChanged()
+     QTime timer;
+     timer.start();
+     // Note: this test assumes we get one dataChanged signal per each row.
+-    while(timer.elapsed() < 10000 && spy.count() < rows.size())
++    while(timer.elapsed() < DEFAULT_TIMEOUT && spy.count() < rows.size())
+         QTest::qWait(100);
+ 
+     // Verify the row got modified
+@@ -345,7 +345,7 @@ void tst_TrackerLiveMultiValue::secondaryResourceAdded()
+                      QSparqlQuery::InsertStatement));
+     QTime timer;
+     timer.start();
+-    while(timer.elapsed() < 5000 && spy.count() < 1)
++    while(timer.elapsed() < DEFAULT_TIMEOUT && spy.count() < 1)
+         QTest::qWait(100);
+ 
+     // Verify the inserted row but don't care about ordering
+@@ -385,7 +385,7 @@ void tst_TrackerLiveMultiValue::secondaryResourceRemoved()
+                      QSparqlQuery::DeleteStatement));
+     QTime timer;
+     timer.start();
+-    while(timer.elapsed() < 5000 && model->rowCount() > 3)
++    while(timer.elapsed() < DEFAULT_TIMEOUT && model->rowCount() > 3)
+         QTest::qWait(100);
+ 
+     // The test just verifies that the contents of the model are correct. The
+@@ -404,7 +404,7 @@ void tst_TrackerLiveMultiValue::secondaryResourceRemoved()
+                      "<feed002> a rdfs:Resource . }",
+                      QSparqlQuery::DeleteStatement));
+     timer.start();
+-    while(timer.elapsed() < 5000 && model->rowCount() > 1)
++    while(timer.elapsed() < DEFAULT_TIMEOUT && model->rowCount() > 1)
+         QTest::qWait(100);
+ 
+     // The test just verifies that the contents of the model are correct. The
+@@ -439,7 +439,7 @@ void tst_TrackerLiveMultiValue::secondaryResourceChanged()
+                      QSparqlQuery::DeleteStatement));
+     QTime timer;
+     timer.start();
+-    while(timer.elapsed() < 10000 && spy.count() < 1)
++    while(timer.elapsed() < DEFAULT_TIMEOUT && spy.count() < 1)
+         QTest::qWait(100);
+ 
+     // Verify the row got modified
+@@ -485,7 +485,7 @@ void tst_TrackerLiveMultiValue::primaryAndSecondaryResourceAdded()
+                      QSparqlQuery::InsertStatement));
+     QTime timer;
+     timer.start();
+-    while(timer.elapsed() < 5000 && spy.count() < 1)
++    while(timer.elapsed() < DEFAULT_TIMEOUT && spy.count() < 1)
+         QTest::qWait(100);
+ 
+     // Verify the inserted row but don't care about ordering
+diff --git a/tests/live-ontology/tst_live_ontology.cpp b/tests/live-ontology/tst_live_ontology.cpp
+index 441cfce..ab435cd 100644
+--- a/tests/live-ontology/tst_live_ontology.cpp
++++ b/tests/live-ontology/tst_live_ontology.cpp
+@@ -124,7 +124,7 @@ void tst_TrackerLiveOntology::queryPredicates()
+     ontologyQuerier->addPredicate("nmo:messageSubject");
+     ontologyQuerier->start();
+ 
+-    QVERIFY(signalRecorder->waitForSignals(*signalList, 6000));
++    QVERIFY(signalRecorder->waitForSignals(*signalList, 15000));
+     QCOMPARE(signalRecorder->signalData(*signalList).count(), 1);
+ 
+     const QHash<QString, int>& predicateToId = ontologyQuerier->shortPredicateToIdMap();
+@@ -144,7 +144,7 @@ void tst_TrackerLiveOntology::queryClasses()
+     }
+     ontologyQuerier->start();
+ 
+-    QVERIFY(signalRecorder->waitForSignals(*signalList, 3000));
++    QVERIFY(signalRecorder->waitForSignals(*signalList, 15000));
+     QCOMPARE(signalRecorder->signalData(*signalList).count(), 1);
+ 
+     QCOMPARE(ontologyQuerier->longClasses().size(), shortClasses.size());
+diff --git a/tests/live-pausing/tst_live_pausing.cpp b/tests/live-pausing/tst_live_pausing.cpp
+index c0e72b1..a55eae5 100644
+--- a/tests/live-pausing/tst_live_pausing.cpp
++++ b/tests/live-pausing/tst_live_pausing.cpp
+@@ -220,7 +220,7 @@ void tst_TrackerLivePausing::initialQueryAndUpdatesSimultaneously()
+     // wait until we receive the rest of the signals
+     QTime timer;
+     timer.start();
+-    while (model->rowCount() < 2000 && timer.elapsed() < 10000)
++    while (model->rowCount() < 2000 && timer.elapsed() < DEFAULT_TIMEOUT)
+         QTest::qWait(100);
+ 
+     //printModel(liveQuery->model());
+@@ -293,7 +293,7 @@ void tst_TrackerLivePausing::pauseUpdates()
+     // Wait until the model has the data
+     QTime timer;
+     timer.start();
+-    while (spy.count() < 2 && timer.elapsed() < 5000)
++    while (spy.count() < 2 && timer.elapsed() < DEFAULT_TIMEOUT)
+         QTest::qWait(100);
+ 
+     QCOMPARE(spy.count(), 2);
+@@ -338,7 +338,7 @@ void tst_TrackerLivePausing::tooManyIds()
+         executeQuery(QSparqlQuery(query, QSparqlQuery::InsertStatement));
+     }
+     // wait enough so that all the signals are received
+-    QTest::qWait(4000);
++    QTest::qWait(20000);
+ 
+     // Resume the updates
+     liveQuery->setUpdatesEnabled(true);
+@@ -346,7 +346,7 @@ void tst_TrackerLivePausing::tooManyIds()
+     // Wait until the model has the data
+     QTime timer;
+     timer.start();
+-    while (liveQuery->model()->rowCount() < 1500 && timer.elapsed() < 5000)
++    while (liveQuery->model()->rowCount() < 1500 && timer.elapsed() < DEFAULT_TIMEOUT)
+         QTest::qWait(100);
+ 
+     QCOMPARE(liveQuery->model()->rowCount(), 1500);
+diff --git a/tests/live-simple-ordered/tst_live_simple_ordered.cpp b/tests/live-simple-ordered/tst_live_simple_ordered.cpp
+index b3f422c..94c836c 100644
+--- a/tests/live-simple-ordered/tst_live_simple_ordered.cpp
++++ b/tests/live-simple-ordered/tst_live_simple_ordered.cpp
+@@ -275,7 +275,7 @@ void tst_TrackerLiveSimpleOrdered::resourceAdded()
+                               QSparqlQuery::InsertStatement));
+     QTime timer;
+     timer.start();
+-    while(timer.elapsed() < 5000 && spy.count() < 1)
++    while(timer.elapsed() < DEFAULT_TIMEOUT && spy.count() < 1)
+         QTest::qWait(100);
+ 
+     // Verify the inserted row
+diff --git a/tests/live-simple/tst_live_simple.cpp b/tests/live-simple/tst_live_simple.cpp
+index b234d1b..a542da3 100644
+--- a/tests/live-simple/tst_live_simple.cpp
++++ b/tests/live-simple/tst_live_simple.cpp
+@@ -208,7 +208,7 @@ void tst_TrackerLiveSimple::resourceAdded()
+                      QSparqlQuery::InsertStatement));
+     QTime timer;
+     timer.start();
+-    while(timer.elapsed() < 5000 && spy.count() < 1)
++    while(timer.elapsed() < DEFAULT_TIMEOUT && spy.count() < 1)
+         QTest::qWait(100);
+ 
+     // Verify the inserted row but don't care about ordering
+@@ -244,7 +244,7 @@ void tst_TrackerLiveSimple::resourceRemoved()
+                      QSparqlQuery::DeleteStatement));
+     QTime timer;
+     timer.start();
+-    while(timer.elapsed() < 5000 && spy.count() < 1)
++    while(timer.elapsed() < DEFAULT_TIMEOUT && spy.count() < 1)
+         QTest::qWait(100);
+ 
+     // Verify the row got removed
+@@ -282,7 +282,7 @@ void tst_TrackerLiveSimple::resourceChanged()
+                      QSparqlQuery::DeleteStatement));
+     QTime timer;
+     timer.start();
+-    while(timer.elapsed() < 5000 && spy.count() < 1)
++    while(timer.elapsed() < DEFAULT_TIMEOUT && spy.count() < 1)
+         QTest::qWait(100);
+ 
+     // Verify the row got modified
+diff --git a/tests/live-updaters/tst_live_updaters.cpp b/tests/live-updaters/tst_live_updaters.cpp
+index 1598cbc..714844d 100644
+--- a/tests/live-updaters/tst_live_updaters.cpp
++++ b/tests/live-updaters/tst_live_updaters.cpp
+@@ -240,7 +240,7 @@ void tst_TrackerLiveUpdaters::verifyRowInsertionToBothModels_impl
+ 
+     QVERIFY( addResource() );
+ 
+-    QVERIFY( signalsRecorder.waitForSignals(sl, 5000) );
++    QVERIFY( signalsRecorder.waitForSignals(sl, DEFAULT_TIMEOUT) );
+     const QList<SignalsRecorder::SignalData> model1SignalData(
+             signalsRecorder.signalData(model1,SIGNAL(rowsInserted(QModelIndex, int, int))) );
+     const QList<SignalsRecorder::SignalData> model2SignalData(
+diff --git a/tests/tracker-signals/tst_tracker_signals.cpp b/tests/tracker-signals/tst_tracker_signals.cpp
+index 6139415..15ca388 100644
+--- a/tests/tracker-signals/tst_tracker_signals.cpp
++++ b/tests/tracker-signals/tst_tracker_signals.cpp
+@@ -236,7 +236,7 @@ void tst_TrackerSignals::contact_added()
+ 
+     QTime timer;
+     timer.start();
+-    while(timer.elapsed() < 5000 && !spy.count())
++    while(timer.elapsed() < DEFAULT_TIMEOUT && !spy.count())
+         QCoreApplication::processEvents();
+ 
+     QCOMPARE(spy.count(), 1);
+@@ -296,7 +296,7 @@ void tst_TrackerSignals::contact_deleted()
+ 
+     QTime timer;
+     timer.start();
+-    while(timer.elapsed() < 5000 && !dummySpy.count())
++    while(timer.elapsed() < DEFAULT_TIMEOUT && !dummySpy.count())
+         QCoreApplication::processEvents();
+ 
+     // Then start listening to changes
+@@ -335,7 +335,7 @@ void tst_TrackerSignals::contact_deleted()
+     // 2) TrackerChangeNotifier gets the signal and sends it to the spy
+ 
+     timer.start();
+-    while(timer.elapsed() < 5000 && !spy.count())
++    while(timer.elapsed() < DEFAULT_TIMEOUT && !spy.count())
+         QCoreApplication::processEvents();
+ 
+     QCOMPARE(spy.count(), 1);
+@@ -400,7 +400,7 @@ void tst_TrackerSignals::recreateChangeNotifier()
+ 
+         QTime timer;
+         timer.start();
+-        while(timer.elapsed() < 5000 && !spy.count())
++        while(timer.elapsed() < DEFAULT_TIMEOUT && !spy.count())
+             QCoreApplication::processEvents();
+ 
+         QCOMPARE(spy.count(), 1);
+@@ -433,7 +433,7 @@ void tst_TrackerSignals::recreateChangeNotifier()
+ 
+         QTime timer;
+         timer.start();
+-        while(timer.elapsed() < 5000 && !spy.count())
++        while(timer.elapsed() < DEFAULT_TIMEOUT && !spy.count())
+             QCoreApplication::processEvents();
+ 
+         QCOMPARE(spy.count(), 1);
+@@ -465,21 +465,21 @@ void tst_TrackerSignals::insertsBuffered()
+     // Lets wait 2 seconds to make sure the signal won't come
+     QTime timer;
+     timer.start();
+-    while(timer.elapsed() < 2000)
++    while(timer.elapsed() < 10000)
+         QCoreApplication::processEvents();
+     QCOMPARE(spy.count(), 0);
+ 
+     // Do another insert
+     insertContacts(QStringList() << "uri2", QStringList() << "Steven2");
+     timer.start();
+-    while(timer.elapsed() < 2000)
++    while(timer.elapsed() < 10000)
+         QCoreApplication::processEvents();
+     QCOMPARE(spy.count(), 0);
+ 
+     // Do final insert
+     insertContacts(QStringList() << "uri3", QStringList() << "Steven3");
+     timer.start();
+-    while(timer.elapsed() < 5000 && !spy.count())
++    while(timer.elapsed() < DEFAULT_TIMEOUT && !spy.count())
+         QCoreApplication::processEvents();
+ 
+     QCOMPARE(spy.count(), 1);
+@@ -489,7 +489,7 @@ void tst_TrackerSignals::insertsBuffered()
+     // Now anoher iteration
+     insertContacts(QStringList() << "uri4" << "uri5", QStringList() << "Steven4" << "Steven5");
+     timer.start();
+-    while(timer.elapsed() < 2000)
++    while(timer.elapsed() < 10000)
+         QCoreApplication::processEvents();
+     QCOMPARE(spy.count(), 1);
+     receiver.deletes.clear();
+@@ -497,7 +497,7 @@ void tst_TrackerSignals::insertsBuffered()
+ 
+     insertContacts(QStringList() << "uri6" << "uri7", QStringList() << "Steven6" << "Steven7");
+     timer.start();
+-    while(timer.elapsed() < 5000 && spy.count()!=2)
++    while(timer.elapsed() < DEFAULT_TIMEOUT && spy.count()!=2)
+         QCoreApplication::processEvents();
+     QCOMPARE(spy.count(), 2);
+     QVERIFY(receiver.deletes.size() == 0);
+@@ -531,7 +531,7 @@ void tst_TrackerSignals::removesBuffered()
+     // Wait until insert is done
+     QTime timer;
+     timer.start();
+-    while(timer.elapsed() < 4000 && !spy.count())
++    while(timer.elapsed() < DEFAULT_TIMEOUT && !spy.count())
+         QCoreApplication::processEvents();
+ 
+     QCOMPARE(receiver.deletes.size(), 0);
+@@ -562,7 +562,7 @@ void tst_TrackerSignals::removesBuffered()
+ 
+     // Lets wait fir signal
+     timer.start();
+-    while(timer.elapsed() < 5000 && !spy.count())
++    while(timer.elapsed() < DEFAULT_TIMEOUT && !spy.count())
+         QCoreApplication::processEvents();
+ 
+     QCOMPARE(receiver.deletes.size(), 12);
+@@ -577,7 +577,7 @@ void tst_TrackerSignals::removesBuffered()
+     removeContacts(uris);
+ 
+     timer.start();
+-    while(timer.elapsed() < 5000 && spy.count()!=3)
++    while(timer.elapsed() < DEFAULT_TIMEOUT && spy.count()!=3)
+         QCoreApplication::processEvents();
+ 
+     QCOMPARE(receiver.deletes.size(), 30);
+@@ -605,7 +605,7 @@ void tst_TrackerSignals::switchBuffer()
+     // Wait until insert is done
+     QTime timer;
+     timer.start();
+-    while(timer.elapsed() < 4000 && !spy.count())
++    while(timer.elapsed() < DEFAULT_TIMEOUT && !spy.count())
+         QCoreApplication::processEvents();
+ 
+     QCOMPARE(receiver.deletes.size(), 0);
+@@ -645,7 +645,7 @@ void tst_TrackerSignals::switchBuffer()
+ 
+     // Lets wait for signal
+     timer.start();
+-    while(timer.elapsed() < 5000 && spy.count()!=3)
++    while(timer.elapsed() < DEFAULT_TIMEOUT && spy.count()!=3)
+         QCoreApplication::processEvents();
+ 
+     QCOMPARE(receiver.deletes.size(), 6);
+diff --git a/tests/utils/livetesthelpers.h b/tests/utils/livetesthelpers.h
+index 536ceba..51e4025 100644
+--- a/tests/utils/livetesthelpers.h
++++ b/tests/utils/livetesthelpers.h
+@@ -52,6 +52,8 @@
+ #include <QDebug>
+ #include <QSignalSpy>
+ 
++static const int DEFAULT_TIMEOUT = 60000; // ms
++
+ // Convenience function for executing a query (normally an insert or a delete),
+ // waiting for the query to finish, and waiting for Tracker to have sent the
+ // GraphUpdated signal so that it won't affect the test.
+@@ -84,7 +86,7 @@ bool waitUntilModelFilled(TrackerLiveQuery* lq, int rowCount)
+     // Wait until the initial data is received
+     QTime timer;
+     timer.start();
+-    while(timer.elapsed() < 8000 && spy.count() == 0)
++    while(timer.elapsed() < DEFAULT_TIMEOUT && spy.count() == 0)
+         QTest::qWait(100);
+ 
+     return (spy.count() == 1 && lq->model()->rowCount() == rowCount);
+diff --git a/tests/utils/updatewaiter.h b/tests/utils/updatewaiter.h
+index 55a2a26..a0d1033 100644
+--- a/tests/utils/updatewaiter.h
++++ b/tests/utils/updatewaiter.h
+@@ -52,7 +52,7 @@ public:
+     UpdateWaiter(const QString& className, int insertsAmount, int removesAmount=0);
+     ~UpdateWaiter();
+ 
+-    bool waitForAllUpdated(int timeoutMs = 4000);
++    bool waitForAllUpdated(int timeoutMs = DEFAULT_TIMEOUT);
+     void setUpdatesAmount(int insertsAmount, int removesAmount);
+ 
+ public slots:
